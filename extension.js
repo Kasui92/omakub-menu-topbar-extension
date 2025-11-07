@@ -1,4 +1,3 @@
-// extension.js
 import St from "gi://St";
 import GObject from "gi://GObject";
 import Gio from "gi://Gio";
@@ -10,16 +9,32 @@ const TopbarButton = GObject.registerClass(
     _init(extensionPath) {
       super._init(0.0, "Topbar Icon", false);
 
+      // Remove all default styling and behavior
+      this.remove_style_class_name("panel-button");
+      this.style = "padding: 0; margin: 0 0 0 14px;";
+      this.reactive = true;
+      this.can_focus = false;
+      this.track_hover = false;
+
       // Load icon from local file
       let iconPath = extensionPath + "/icon.svg";
       let gicon = Gio.icon_new_for_string(iconPath);
 
       let icon = new St.Icon({
         gicon: gicon,
-        style_class: "system-status-icon",
+        icon_size: 14,
       });
 
-      this.add_child(icon);
+      let box = new St.Bin({
+        style: "padding: 0; margin: 0 0 0 0;",
+        child: icon,
+      });
+
+      this.add_child(box);
+
+      // Force icon color to white
+      icon.set_style("-st-icon-style: symbolic;");
+      icon.add_style_class_name("system-status-icon");
 
       this.connect("button-press-event", () => {
         this._executeCommand();
@@ -29,8 +44,7 @@ const TopbarButton = GObject.registerClass(
 
     _executeCommand() {
       try {
-        // Your command here
-        let command = ["notify-send", "Clicked", "Icon was clicked!"];
+        let command = ["omakub-menu"];
 
         Gio.Subprocess.new(command, Gio.SubprocessFlags.NONE);
       } catch (e) {
@@ -53,7 +67,7 @@ export default class MyExtension {
   enable() {
     this._button = new TopbarButton(this._metadata.path);
 
-    Main.panel.addToStatusArea("my-topbar-button", this._button, 0, "left");
+    Main.panel.addToStatusArea("omakub-topbar-button", this._button, 0, "left");
   }
 
   disable() {
