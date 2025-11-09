@@ -1,30 +1,23 @@
-# Makefile for GNOME Shell Extension
-
 UUID = omakub-topbar-menu@omakasui.org
 EXTENSION_DIR = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 FILES = extension.js metadata.json icon.svg
 
+.PHONY: help
+help:
+	@echo "make dev        Install for development"
+	@echo "make enable     Enable extension"
+	@echo "make disable    Disable extension"
+	@echo "make local      Install and enable"
+	@echo "make build      Create .zip package"
+	@echo "make uninstall  Remove extension"
+	@echo "make logs       Show logs"
+	@echo "make clean      Remove build files"
+
 .PHONY: dev
 dev:
-	@echo "Installing in development mode..."
 	@mkdir -p $(EXTENSION_DIR)
 	@cp $(FILES) $(EXTENSION_DIR)/
-	@echo "✓ Development installation complete"
-	@echo ""
-	@echo "Next steps:"
-	@echo "  1. Restart GNOME Shell (Alt+F2 → r on X11, or logout on Wayland)"
-	@echo "  2. Run: make enable"
-
-.PHONY: local
-local:
-	@echo "Installing locally from source..."
-	@mkdir -p $(EXTENSION_DIR)
-	@cp $(FILES) $(EXTENSION_DIR)/
-	@gnome-extensions enable $(UUID) 2>/dev/null || true
-	@echo "✓ Local installation complete"
-	@echo ""
-	@echo "Extension installed and enabled."
-	@echo "Restart GNOME Shell to load the extension."
+	@echo "✓ Installed. Restart GNOME Shell, then: make enable"
 
 .PHONY: enable
 enable:
@@ -34,23 +27,34 @@ enable:
 disable:
 	@gnome-extensions disable $(UUID)
 
+.PHONY: local
+local:
+	@mkdir -p $(EXTENSION_DIR)
+	@cp $(FILES) $(EXTENSION_DIR)/
+	@gext enable $(UUID)
+	@echo "✓ Installed and enabled. Restart GNOME Shell."
+
 .PHONY: build
 build:
-	@echo "Building extension package..."
 	@mkdir -p build
 	@cp $(FILES) build/
 	@cd build && zip -q -r ../$(UUID).shell-extension.zip *
 	@rm -rf build
 	@echo "✓ Created $(UUID).shell-extension.zip"
 
-.PHONY: install
-install: build
-	@gnome-extensions install --force $(UUID).shell-extension.zip
-	@echo "Installed. Restart GNOME Shell then run: make enable"
+.PHONY: uninstall
+uninstall:
+	@gnome-extensions disable $(UUID) 2>/dev/null || true
+	@gnome-extensions uninstall $(UUID) 2>/dev/null || true
+	@rm -rf $(EXTENSION_DIR)
+	@echo "✓ Uninstalled"
+
+.PHONY: logs
+logs:
+	@journalctl -f -o cat /usr/bin/gnome-shell | grep -i --line-buffered "$(UUID)\|js error"
 
 .PHONY: clean
 clean:
-	@echo "Cleaning build artifacts..."
 	@rm -f $(UUID).shell-extension.zip
 	@rm -rf build
-	@echo "✓ Cleanup complete"
+	@echo "✓ Cleaned"
