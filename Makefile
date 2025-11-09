@@ -1,4 +1,4 @@
-UUID = omakub-topbar-menu@omakasui.org
+UUID = omakub-menu-topbar@omakasui.org
 EXTENSION_DIR = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 FILES = extension.js metadata.json icon.svg
 

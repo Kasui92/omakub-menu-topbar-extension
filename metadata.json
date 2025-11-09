@@ -1,7 +1,7 @@
 {
-  "name": "Omakub Topbar Menu",
-  "description": "Adds an icon to the top bar that opens a menu with various system actions.",
-  "uuid": "omakub-topbar-menu@omakasui.org",
+  "name": "Omakub Menu Topbar",
+  "description": "Adds a top bar toggle button for Omakub Menu.",
+  "uuid": "omakub-menu-topbar@omakasui.org",
   "shell-version": ["46", "47", "48", "49"],
   "version": 1
 }
