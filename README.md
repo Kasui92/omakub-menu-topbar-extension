@@ -41,4 +41,4 @@ The extension now includes a **Preferences panel** for easy customization.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/Kasui92/omakub-menu-topbar-extension/blob/main/LICENSE) file for details.
+This project is licensed under the [MIT License](https://github.com/Kasui92/omakub-menu-topbar-extension/blob/main/LICENSE).
