@@ -4,8 +4,8 @@ GNOME Shell extension that adds the [Omakub](https://omakub.org) icon to the top
 
 ## Installation
 
-- Use the Quick Installation command:
-  ```bash 
+- Use the Quick Install :
+  ```bash
   curl -fsSL https://omakasui.org/omakub-menu-topbar-extension | bash
   ```
 - Build it yourself via `make install` or `make dev`.
