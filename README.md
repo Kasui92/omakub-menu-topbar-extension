@@ -2,6 +2,8 @@
 
 GNOME Shell extension that adds the [Omakub](https://omakub.org) icon to the topbar.
 
+<img width="277" height="225" alt="image" src="https://github.com/user-attachments/assets/041c42f3-9835-45be-8201-786cfaae4bf7" />
+
 ## Installation
 
 - Use the Quick Install :
