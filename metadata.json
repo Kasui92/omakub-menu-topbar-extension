@@ -3,5 +3,6 @@
   "description": "Adds a top bar toggle button for Omakub Menu.",
   "uuid": "omakub-menu-topbar@omakasui.org",
   "shell-version": ["46", "47", "48", "49"],
-  "version": 1
+  "version": "1.1.0",
+  "settings-schema": "org.gnome.shell.extensions.omakub-menu-topbar"
 }

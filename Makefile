@@ -1,22 +1,27 @@
 UUID = omakub-menu-topbar@omakasui.org
 EXTENSION_DIR = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
-FILES = extension.js metadata.json icon.svg
+FILES = extension.js metadata.json icon.png prefs.js
+SCHEMA_DIR = schemas
 
-.PHONY: help
-help:
-	@echo "make dev        Install for development"
-	@echo "make enable     Enable extension"
-	@echo "make disable    Disable extension"
-	@echo "make local      Install and enable"
-	@echo "make build      Create .zip package"
-	@echo "make uninstall  Remove extension"
-	@echo "make logs       Show logs"
-	@echo "make clean      Remove build files"
-
-.PHONY: dev
-dev:
+# Internal target for copying files
+_copy-files:
 	@mkdir -p $(EXTENSION_DIR)
 	@cp $(FILES) $(EXTENSION_DIR)/
+	@mkdir -p $(EXTENSION_DIR)/schemas
+	@cp $(SCHEMA_DIR)/*.xml $(EXTENSION_DIR)/schemas/
+	@glib-compile-schemas $(EXTENSION_DIR)/schemas/
+
+.PHONY: install
+install: _copy-files
+	@gnome-extensions enable $(UUID) 2>/dev/null || true
+	@echo "✓ Extension installed and enabled"
+	@echo ""
+	@echo "✓ Installed. Restart GNOME Shell, then: make enable"
+
+.PHONY: dev
+dev: _copy-files
+	@echo "✓ Development installation complete"
+	@echo ""
 	@echo "✓ Installed. Restart GNOME Shell, then: make enable"
 
 .PHONY: enable
@@ -27,31 +32,24 @@ enable:
 disable:
 	@gnome-extensions disable $(UUID)
 
-.PHONY: local
-local:
-	@mkdir -p $(EXTENSION_DIR)
-	@cp $(FILES) $(EXTENSION_DIR)/
-	@gext enable $(UUID)
-	@echo "✓ Installed and enabled. Restart GNOME Shell."
+.PHONY: uninstall
+uninstall:
+	@echo "Uninstalling extension..."
+	@gnome-extensions disable $(UUID) 2>/dev/null || true
+	@gnome-extensions uninstall $(UUID) 2>/dev/null || true
+	@rm -rf $(EXTENSION_DIR)
+	@echo "✓ Extension uninstalled and removed"
 
 .PHONY: build
 build:
 	@mkdir -p build
 	@cp $(FILES) build/
+	@mkdir -p build/schemas
+	@cp $(SCHEMA_DIR)/*.xml build/schemas/
+	@glib-compile-schemas build/schemas/
 	@cd build && zip -q -r ../$(UUID).shell-extension.zip *
 	@rm -rf build
 	@echo "✓ Created $(UUID).shell-extension.zip"
-
-.PHONY: uninstall
-uninstall:
-	@gnome-extensions disable $(UUID) 2>/dev/null || true
-	@gnome-extensions uninstall $(UUID) 2>/dev/null || true
-	@rm -rf $(EXTENSION_DIR)
-	@echo "✓ Uninstalled"
-
-.PHONY: logs
-logs:
-	@journalctl -f -o cat /usr/bin/gnome-shell | grep -i --line-buffered "$(UUID)\|js error"
 
 .PHONY: clean
 clean:

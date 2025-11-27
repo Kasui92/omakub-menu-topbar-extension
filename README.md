@@ -4,35 +4,36 @@ GNOME Shell extension that adds the [Omakub](https://omakub.org) icon to the top
 
 ## Installation
 
-```bash
-git clone https://github.com/Kasui92/omakub-menu-topbar-extension.git
-cd omakub-menu-topbar-extension
-make local
-```
+- Use the Quick Installation command `curl -fsSL https://omakasui.org/omakub-menu-topbar-extension | bash`
+- Build it yourself via `make install` or `make dev`.
 
-Restart GNOME Shell:
+Then restart GNOME Shell:
 
 - **X11**: `Alt+F2` → `r` → Enter
 - **Wayland**: logout/login
 
-## Commands
-
-```bash
-make local      # Install and enable
-make uninstall  # Remove extension
-make build      # Create .zip package
-```
-
 ## Development
 
 ```bash
-make dev        # Install without enabling
-make enable     # Enable extension
-make disable    # Disable extension
-make logs       # Show real-time logs
+make dev        # Install extension files
+```
+
+Restart GNOME Shell, then:
+
+```bash
+make enable     # Enable the extension
+```
+
+## Uninstall
+
+```bash
+make uninstall
 ```
 
 ## Customization
 
-Edit `extension.js` to change the command (default: `omakub-menu`).
-Edit `icon.svg` to change icon color and style.
+The extension now includes a **Preferences panel** for easy customization.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Kasui92/omakub-menu-topbar-extension/blob/main/LICENSE) file for details.
